@@ -60,13 +60,11 @@ def take_groups_names(token, grid):
     print('---')
     return (response.json())
 
-#pprint(response.json())
 
 friends_list = []
 groups_list = []
 final_list = []
-l=[]
-
+l = []
 
 friends_list.extend(take_friends(TOKEN, id)["response"]["items"])
 set_list_friends = set(friends_list)
@@ -75,10 +73,6 @@ pprint(set_list_friends)
 groups_list.extend(take_groups(TOKEN, id)["response"]["items"])
 pprint(groups_list)
 
-# l.extend(take_groups_members(TOKEN, 47535294)["response"]["items"])
-# set_l = set(l)
-# pprint(set_l.isdisjoint(set_list_friends))
-
 
 for i in groups_list:
     try:
@@ -86,22 +80,25 @@ for i in groups_list:
         set_l = set(l)
         check_friends = set_l.isdisjoint(set_list_friends)
         if check_friends == False:
-
             final_list.append(i)
         l.clear()
     except KeyError:
-        print('нет доступа')
-    #time.sleep(4)
+        print('ошибка')
 
 print(final_list)
 
-time.sleep(4)
-k = []
-#k.extend(take_groups_names(TOKEN, 129370820))
-pprint(take_groups_names(TOKEN, 129370820)["response"])
+time.sleep(3)
 
-# dd = []
-#
-# for i in final_list:
-#     dd.extend(take_groups_names(TOKEN, i))
-# print(dd)
+d = []
+last_list = []
+
+for i in final_list:
+    try:
+        time.sleep(3)
+        d.append(take_groups_names(TOKEN, i)["response"][0])
+        last_list.append({"name":d[0]["name"], "gid":d[0]["id"],
+                          "members_count":take_groups_members(TOKEN, i)["response"]["count"]})
+        d.clear()
+    except KeyError:
+        print('ошибка')
+pprint(last_list)
